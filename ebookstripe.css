@@ -1,0 +1,22 @@
+/**
+ * @file
+ * EbookStripe default CSS
+ *
+ * @author: Andy "Biolithic" Martha
+ *
+ */
+
+.submitted
+{
+display:none;
+}
+
+.node-readmore
+{
+display:none !important;    
+}
+
+p > a
+{
+line-height:300%;
+}

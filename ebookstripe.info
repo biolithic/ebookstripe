@@ -1,0 +1,7 @@
+; @author: Andy "Biolithic" Martha http://drupal.org/user/1204604
+name = EbookStripe
+description = EbookStripe produces an e-book creator with a teaser and buy now for full content feature with a checkout/credit card processor.
+package = PAYMENTS
+core = 7.x
+configure = admin/config/services/ebookstripe
+dependencies[] = node_view_permissions
