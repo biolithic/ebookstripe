@@ -21,18 +21,6 @@ function ebookstripe_help($path, $arg) {
  * Implements hook_init() to run on every page.
  */
 function ebookstripe_init() {
-// if (drupal_is_front_page()) {
-// drupal_set_message("front page");  
-// }
-
-// user_role_load_by_name($role_name)
-// bbb_chapter1 is the role/taxonomy
-// ebookstripe_chapter2end is the content type
-// foreach (array_keys(node_type_get_names()) as $term)
-//{
-//drupal_set_message($term);
-//}
-
 
 // admin/config/services/ebookstripe
 if (arg(0) == 'admin' && arg(1) == 'config' && arg(2) == 'services' && arg(3) == 'ebookstripe') {
@@ -47,9 +35,6 @@ if (arg(0) == 'admin' && arg(1) == 'config' && arg(2) == 'services' && arg(3) ==
 }
 
 
-
-drupal_add_js(drupal_get_path('module', 'ebookstripe') . '/menu.js', array('scope' => 'footer'));
-drupal_add_css(drupal_get_path('module', 'ebookstripe') . '/ebookstripe.css', array('scope' => 'footer'));
   if (arg(0) == 'node' && is_numeric(arg(1))) {
     $nid = arg(1);
     $node = node_load($nid);
@@ -60,11 +45,11 @@ drupal_add_css(drupal_get_path('module', 'ebookstripe') . '/ebookstripe.css', ar
   }
   
   if (arg(0) == 'startreading') {
-  drupal_add_js(drupal_get_path('module', 'ebookstripe') . '/js/startreading.js', array('scope' => 'footer'));
+  drupal_add_js(drupal_get_path('module', 'readingonthebeachhelper') . '/startreading.js', array('scope' => 'footer'));
   }
   // book/bbb/chapter/1
   if (!is_numeric(arg(0)) && arg(2) == 'chapter' && is_numeric(arg(3))) {
-  drupal_add_js(drupal_get_path('module', 'ebookstripe') . '/js/chapter.js', array('scope' => 'footer'));
+  drupal_add_js(drupal_get_path('module', 'readingonthebeachhelper') . '/chapter.js', array('scope' => 'footer'));
   }
   
   
