@@ -15,212 +15,120 @@
 /**
  * Implements hook_install().
  */
-function ebookstripe_install() {
- // Set the variables for this module
-  variable_set('ebookstripe_environment', "");
-  variable_set('ebookstripe_merchantId_testkey', "");
-  variable_set('ebookstripe_merchantId_livekey', "");
-  variable_set('ebookstripe_publishable_testkey', "");
-  variable_set('ebookstripe_publishable_livekey', "");
-  variable_set('ebookstripe_secret_testkey', "");
-  variable_set('ebookstripe_secret_livekey', "");
-  variable_set('ebookstripe_price', "");
-  variable_set('ebookstripe_gonelive', "");
-  variable_set('ebookstripe_sendemail', "");
-  variable_set('ebookstripe_firstname', "");
-  variable_set('ebookstripe_lastname', "");
-  variable_set('ebookstripe_phone', "");
-  variable_set('ebookstripe_address', "");
-  variable_set('ebookstripe_address2', "");
-  variable_set('ebookstripe_city', "");
-  variable_set('ebookstripe_county', "");
-  variable_set('ebookstripe_state', "");
-  variable_set('ebookstripe_zip', "");
-  variable_set('ebookstripe_site_name', "");
-  variable_set('ebookstripe_site_mail', "");
-  $t = get_t();
+function ebookstripe_install()
+{
+    // Set the variables for this module
+    variable_set('ebookstripe_publishable_testkey', "");
+    variable_set('ebookstripe_publishable_livekey', "");
+    variable_set('ebookstripe_secret_testkey', "");
+    variable_set('ebookstripe_secret_livekey', "");
+    variable_set('ebookstripe_price', "");
+    variable_set('ebookstripe_gonelive', "");
+    variable_set('ebookstripe_sendemail', "");
+    variable_set('ebookstripe_firstname', "");
+    variable_set('ebookstripe_lastname', "");
+    variable_set('ebookstripe_phone', "");
+    variable_set('ebookstripe_address', "");
+    variable_set('ebookstripe_address2', "");
+    variable_set('ebookstripe_city', "");
+    variable_set('ebookstripe_county', "");
+    variable_set('ebookstripe_state', "");
+    variable_set('ebookstripe_zip', "");
+    variable_set('ebookstripe_site_name', "");
+    variable_set('ebookstripe_site_mail', "");
+    $t = get_t();
+    
+    drupal_set_message(t("EbookStripe module installed.  Customer database and custom node type installed."));
+}
 
-  drupal_set_message(t("EbookStripe module installed.  Customer database and custom node type installed."));
-} 
- 
 /**
  * Implements hook_schema().
  */
-function ebookstripe_schema() {
-  $schema['ebookstripe_customers'] = array(
-    'description' => 'Stores the name and email of each customer that buys a book using stripe.com and the ebookstripe module',
-    'fields' => array(
-      'thid' => array(
-        'description' => 'The unique ID for each customer',
-        'type' => 'serial',
-        'not null' => FALSE,
-      ),
-      'timestamp' => array(
-        'description' => 'The Unix timestamp when this customer was added.',
-        'type' => 'int',
-        'not null' => FALSE,
-      ),
-      'contactname' => array(
-        'description' => 'The name of the customer',
-        'type' => 'text',
-        'not null' => FALSE,
-      ),
-      'contactemail' => array(
-        'description' => 'The email of the customer.',
-        'type' => 'varchar',
-        'length' => '255',
-        'not null' => FALSE,
-      ),
-      'booktype' => array(
-        'description' => 'A book type or option for the digital product',
-        'type' => 'varchar',
-        'length' => '255',
-        'not null' => FALSE,
-      ),
-    ),
-    'primary key' => array('thid'),
-  );
-
-  return $schema;
+function ebookstripe_schema()
+{
+    $schema['ebookstripe_customers'] = array(
+        'description' => 'Stores the name and email of each customer that buys a book using stripe.com and the ebookstripe module',
+        'fields' => array(
+            'thid' => array(
+                'description' => 'The unique ID for each customer',
+                'type' => 'serial',
+                'not null' => FALSE
+            ),
+            'timestamp' => array(
+                'description' => 'The Unix timestamp when this customer was added.',
+                'type' => 'int',
+                'not null' => FALSE
+            ),
+            'contactname' => array(
+                'description' => 'The name of the customer',
+                'type' => 'text',
+                'not null' => FALSE
+            ),
+            'contactemail' => array(
+                'description' => 'The email of the customer.',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => FALSE
+            ),
+            'booktype' => array(
+                'description' => 'A book type or option for the digital product',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => FALSE
+            )
+        ),
+        'primary key' => array(
+            'thid'
+        )
+    );
+    
+    return $schema;
 }
 
 
 /**
  * Adds ebookstripe_customers table.
  */
-function ebookstripe_update_7001() {
-  $schema['ebookstripe_customers'] = array(
-    'description' => 'Stores the name and email of each customer that buys a book using stripe.com and the ebookstripe module',
-    'fields' => array(
-      'thid' => array(
-        'description' => 'The unique ID for each customer',
-        'type' => 'serial',
-        'not null' => FALSE,
-      ),
-      'timestamp' => array(
-        'description' => 'The Unix timestamp when this customer was added.',
-        'type' => 'int',
-        'not null' => FALSE,
-      ),
-      'contactname' => array(
-        'description' => 'The name of the customer',
-        'type' => 'text',
-        'not null' => FALSE,
-      ),
-      'contactemail' => array(
-        'description' => 'The email of the customer.',
-        'type' => 'varchar',
-        'length' => '255',
-        'not null' => FALSE,
-      ),
-      'booktype' => array(
-        'description' => 'A book type or option for the digital product',
-        'type' => 'varchar',
-        'length' => '255',
-        'not null' => FALSE,
-      ),
-    ),
-    'primary key' => array('thid'),
-  );
-
-  db_create_table('ebookstripe_customers', $schema['ebookstripe_customers']);
-  drupal_set_message(t("database INstalled"));
-}
-
-/**
- * Return an array of fields, to be used during the install and uninstall process.
- */
-function _ebookstripe_installed_fields() {
-  return array(
-    'ebookstripe_title' => array(
-      'field_name' => 'ebookstripe_title',
-      'type' => 'text',
-      'cardinality' => 1,
-    ),
-    'ebookstripe_author' => array(
-      'field_name' => 'ebookstripe_author',
-      'type' => 'text',
-      'cardinality' => 1,
-    ),
-    'ebookstripe_tag_line' => array(
-      'field_name' => 'ebookstripe_tag_line',
-      'type' => 'text',
-      'cardinality' => 1,
-    ),
-    'ebookstripe_price' => array(
-      'field_name' => 'ebookstripe_price',
-      'type' => 'text',
-      'cardinality' => 1,
-    ),
-    'ebookstripe_version' => array(
-      'field_name' => 'ebookstripe_version',
-      'type' => 'text',
-      'cardinality' => 1,
-    ),
-    'ebookstripe_cover_image' => array(
-      'field_name' => 'ebookstripe_cover_image',
-      'type' => 'image',
-      'cardinality' => 1,
-    ),
-  );
-}
-
-
-/**
- * Return an array of instances, to be used during the install and uninstall process.
- */
-function _ebookstripe_installed_instances() {
-  $t = get_t();
-  return array(
-    'ebookstripe_title' => array(
-      'field_name' => 'ebookstripe_title',
-      'label' => $t('Book Title'),
-      'type' => 'text',
-      'widget' => array(
-        'type' => 'text_textfield',
-      ),
-    ),
-    'ebookstripe_author' => array(
-      'field_name' => 'ebookstripe_author',
-      'label' => $t('Book Author'),
-      'type' => 'text',
-      'widget' => array(
-        'type' => 'text_textfield',
-      ),
-    ),
-    'ebookstripe_tag_line' => array(
-      'field_name' => 'ebookstripe_tag_line',
-      'label' => $t('Book Tag Line'),
-      'type' => 'text',
-      'widget' => array(
-        'type' => 'text_textfield',
-      ),
-    ),
-    'ebookstripe_price' => array(
-      'field_name' => 'ebookstripe_price',
-      'label' => $t('Book Price'),
-      'type' => 'text',
-      'widget' => array(
-        'type' => 'text_textfield',
-      ),
-    ),
-    'ebookstripe_version' => array(
-      'field_name' => 'ebookstripe_version',
-      'label' => $t('Which versions: pdf, epub, mobi, etc'),
-      'type' => 'text',
-      'widget' => array(
-        'type' => 'text',
-      ),
-    ),
-    'ebookstripe_cover_image' => array(
-      'field_name' => 'ebookstripe_cover_image',
-      'label' => $t('Upload an image:'),
-      'required' => FALSE,
-      'widget' => array(
-        'type' => 'image_image',
-      ),
-    ),
-  );
+function ebookstripe_update_7001()
+{
+    $schema['ebookstripe_customers'] = array(
+        'description' => 'Stores the name and email of each customer that buys a book using stripe.com and the ebookstripe module',
+        'fields' => array(
+            'thid' => array(
+                'description' => 'The unique ID for each customer',
+                'type' => 'serial',
+                'not null' => FALSE
+            ),
+            'timestamp' => array(
+                'description' => 'The Unix timestamp when this customer was added.',
+                'type' => 'int',
+                'not null' => FALSE
+            ),
+            'contactname' => array(
+                'description' => 'The name of the customer',
+                'type' => 'text',
+                'not null' => FALSE
+            ),
+            'contactemail' => array(
+                'description' => 'The email of the customer.',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => FALSE
+            ),
+            'booktype' => array(
+                'description' => 'A book type or option for the digital product',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => FALSE
+            )
+        ),
+        'primary key' => array(
+            'thid'
+        )
+    );
+    
+    db_create_table('ebookstripe_customers', $schema['ebookstripe_customers']);
+    drupal_set_message(t("database INstalled"));
 }
 
 
@@ -228,185 +136,182 @@ function _ebookstripe_installed_instances() {
  * Implements hook_uninstall().
  *
  */
-function ebookstripe_uninstall() {
-// types: ebookstripe_beginning ebookstripe_cover ebookstripe_general ebookstripe_illustration ebookstripe_button ebookstripe_chapter1end ebookstripe_product 
-  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
-  $result = db_query($sql, array(':type' => 'ebookstripe_beginning'));
-  $nids = array();
-  foreach ($result as $row) {
-    $nids[] = $row->nid;
-  }
-  // Delete all the nodes at once
-  // http://api.drupal.org/api/function/node_delete_multiple/7
-  node_delete_multiple($nids);
-
-  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
-  $result = db_query($sql, array(':type' => 'ebookstripe_cover'));
-  $nids = array();
-  foreach ($result as $row) {
-    $nids[] = $row->nid;
-  }
-  node_delete_multiple($nids);
-  
-  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
-  $result = db_query($sql, array(':type' => 'ebookstripe_general'));
-  $nids = array();
-  foreach ($result as $row) {
-    $nids[] = $row->nid;
-  }
-  node_delete_multiple($nids);
-  
-  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
-  $result = db_query($sql, array(':type' => 'ebookstripe_illustration'));
-  $nids = array();
-  foreach ($result as $row) {
-    $nids[] = $row->nid;
-  }
-  node_delete_multiple($nids);
-  
-  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
-  $result = db_query($sql, array(':type' => 'ebookstripe_button'));
-  $nids = array();
-  foreach ($result as $row) {
-    $nids[] = $row->nid;
-  }
-  node_delete_multiple($nids);
-  
-  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
-  $result = db_query($sql, array(':type' => 'ebookstripe_product'));
-  $nids = array();
-  foreach ($result as $row) {
-    $nids[] = $row->nid;
-  }
-  node_delete_multiple($nids);
-  
-  // Delete Stripe Key variables.
- variable_del('ebookstripe_environment');
-  variable_del('ebookstripe_merchantId_testkey');
-  variable_del('ebookstripe_merchantId_livekey');
-  variable_del('ebookstripe_publishable_testkey');
-  variable_del('ebookstripe_publishable_livekey');
-  variable_del('ebookstripe_secret_testkey');
-  variable_del('ebookstripe_secret_livekey');
-  variable_del('ebookstripe_price');
-  variable_del('ebookstripe_gonelive');
-  variable_del('ebookstripe_sendemail');
-  variable_del('ebookstripe_firstname');
-  variable_del('ebookstripe_lastname');
-  variable_del('ebookstripe_phone');
-  variable_del('ebookstripe_address');
-  variable_del('ebookstripe_address2');
-  variable_del('ebookstripe_city');
-  variable_del('ebookstripe_county');
-  variable_del('ebookstripe_state');
-  variable_del('ebookstripe_zip');
-  variable_del('ebookstripe_introduction');
-  variable_del('ebookstripe_forward');
-  variable_del('ebookstripe_resources');
-  variable_del('ebookstripe_whyshouldyouread');
-  variable_del('ebookstripe_copyright');
-  variable_del('ebookstripe_abouttheauthor');
-  variable_del('ebookstripe_conclusion');
-  variable_del('ebookstripe_tableofcontents');
-  variable_del('ebookstripe_site_name');
-  variable_del('ebookstripe_site_mail');
-
-  // Loop over each of the fields defined by this module and delete
-  // all instances of the field, their data, and the field itself.
-  // http://api.drupal.org/api/function/field_delete_field/7  
-  foreach (array_keys(_ebookstripe_installed_fields()) as $field) {
-    field_delete_field($field);
-  }
-
-  field_delete_field("field_ebookstripe_chapter");
-  field_delete_field("field_ebookstripe_pic");
-  
-  // Loop over any remaining field instances attached to the node_example
-  // content type (such as the body field) and delete them individually.
-  // http://api.drupal.org/api/function/field_delete_field/7
-  $instances = field_info_instances('node', 'ebookstripe_beginning');
-  foreach ($instances as $instance_name => $instance) {
-    field_delete_instance($instance);
-  }
-  
-  $instances = field_info_instances('node', 'ebookstripe_cover');
-  foreach ($instances as $instance_name => $instance) {
-    field_delete_instance($instance);
-  }
-  
-  $instances = field_info_instances('node', 'ebookstripe_general');
-  foreach ($instances as $instance_name => $instance) {
-    field_delete_instance($instance);
-  }
-  
-  $instances = field_info_instances('node', 'ebookstripe_illustration');
-  foreach ($instances as $instance_name => $instance) {
-    field_delete_instance($instance);
-  }
-
-  $instances = field_info_instances('node', 'ebookstripe_button');
-  foreach ($instances as $instance_name => $instance) {
-    field_delete_instance($instance);
-  }
-  
-  $instances = field_info_instances('node', 'ebookstripe_product');
-  foreach ($instances as $instance_name => $instance) {
-    field_delete_instance($instance);
-  }
- 
-//  types: ebookstripe_beginning ebookstripe_cover ebookstripe_general ebookstripe_illustration ebookstripe_button ebookstripe_chapter1end ebookstripe_product   
-   // Delete our content type
-  // http://api.drupal.org/api/function/node_type_delete/7
-  node_type_delete('ebookstripe_beginning');
-  node_type_delete('ebookstripe_cover');
-  node_type_delete('ebookstripe_general');
-  node_type_delete('ebookstripe_beginning');
-  node_type_delete('ebookstripe_illustration');
-  node_type_delete('ebookstripe_button');
-  node_type_delete('ebookstripe_product');
-
-// ebookstripe_chapter2end is the content type
-foreach (array_keys(node_type_get_names()) as $term)
+function ebookstripe_uninstall()
 {
-if (stristr($term, "ebookstripe_chapter"))
-{
-$sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
-  $result = db_query($sql, array(':type' => "$term"));
-  $nids = array();
-  foreach ($result as $row) {
-    $nids[] = $row->nid;
-}
-node_delete_multiple($nids);
-node_type_delete($term);
-}
-}
-
-
-// booktitle_chapter1
-$listofbooks = variable_get('ebookstripe_number_chapters');
-$listofbooks = explode(" ", $listofbooks);
-foreach ($listofbooks as $book) {
-$numchapter = explode("-", $book);
-
-for ($x=0; $x<=$numchapter[1]; $x++)
-{
-$term = $numchapter[0] . "_chapter" . $x;
-user_role_delete($term);
-$taxterm = taxonomy_get_term_by_name($term);
-if ($taxterm)
-{
-foreach (array_keys($taxterm) as $tid)
-{
-taxonomy_term_delete($tid);
-}
-}
-
-}  
-}
-variable_del('ebookstripe_number_chapters');
-
-  // Purge all field infromation
-  // http://api.drupal.org/api/function/field_purge_batch/7
-  field_purge_batch(1000);
-  drupal_flush_all_caches();
+    // types: ebookstripe_beginning ebookstripe_cover ebookstripe_general ebookstripe_illustration ebookstripe_button ebookstripe_chapter1end ebookstripe_product 
+    $sql    = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(
+        ':type' => 'ebookstripe_beginning'
+    ));
+    $nids   = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+    // Delete all the nodes at once
+    // http://api.drupal.org/api/function/node_delete_multiple/7
+    node_delete_multiple($nids);
+    
+    $sql    = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(
+        ':type' => 'ebookstripe_cover'
+    ));
+    $nids   = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+    node_delete_multiple($nids);
+    
+    $sql    = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(
+        ':type' => 'ebookstripe_general'
+    ));
+    $nids   = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+    node_delete_multiple($nids);
+    
+    $sql    = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(
+        ':type' => 'ebookstripe_illustration'
+    ));
+    $nids   = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+    node_delete_multiple($nids);
+    
+    $sql    = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(
+        ':type' => 'ebookstripe_button'
+    ));
+    $nids   = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+    node_delete_multiple($nids);
+    
+    $sql    = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(
+        ':type' => 'ebookstripe_product'
+    ));
+    $nids   = array();
+    foreach ($result as $row) {
+        $nids[] = $row->nid;
+    }
+    node_delete_multiple($nids);
+    
+    // Delete Stripe Key variables.
+    variable_del('ebookstripe_publishable_testkey');
+    variable_del('ebookstripe_publishable_livekey');
+    variable_del('ebookstripe_secret_testkey');
+    variable_del('ebookstripe_secret_livekey');
+    variable_del('ebookstripe_price');
+    variable_del('ebookstripe_gonelive');
+    variable_del('ebookstripe_sendemail');
+    variable_del('ebookstripe_firstname');
+    variable_del('ebookstripe_lastname');
+    variable_del('ebookstripe_phone');
+    variable_del('ebookstripe_address');
+    variable_del('ebookstripe_address2');
+    variable_del('ebookstripe_city');
+    variable_del('ebookstripe_county');
+    variable_del('ebookstripe_state');
+    variable_del('ebookstripe_zip');
+    variable_del('ebookstripe_introduction');
+    variable_del('ebookstripe_forward');
+    variable_del('ebookstripe_resources');
+    variable_del('ebookstripe_whyshouldyouread');
+    variable_del('ebookstripe_copyright');
+    variable_del('ebookstripe_abouttheauthor');
+    variable_del('ebookstripe_conclusion');
+    variable_del('ebookstripe_tableofcontents');
+    variable_del('ebookstripe_site_name');
+    variable_del('ebookstripe_site_mail');
+    
+    field_delete_field("field_ebookstripe_chapter");
+    field_delete_field("field_ebookstripe_pic");
+    
+    // Loop over any remaining field instances attached to the node_example
+    // content type (such as the body field) and delete them individually.
+    // http://api.drupal.org/api/function/field_delete_field/7
+    $instances = field_info_instances('node', 'ebookstripe_beginning');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+    
+    $instances = field_info_instances('node', 'ebookstripe_cover');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+    
+    $instances = field_info_instances('node', 'ebookstripe_general');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+    
+    $instances = field_info_instances('node', 'ebookstripe_illustration');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+    
+    $instances = field_info_instances('node', 'ebookstripe_button');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+    
+    $instances = field_info_instances('node', 'ebookstripe_product');
+    foreach ($instances as $instance_name => $instance) {
+        field_delete_instance($instance);
+    }
+    
+    //  types: ebookstripe_beginning ebookstripe_cover ebookstripe_general ebookstripe_illustration ebookstripe_button ebookstripe_chapter1end ebookstripe_product   
+    // Delete our content type
+    // http://api.drupal.org/api/function/node_type_delete/7
+    node_type_delete('ebookstripe_beginning');
+    node_type_delete('ebookstripe_cover');
+    node_type_delete('ebookstripe_general');
+    node_type_delete('ebookstripe_beginning');
+    node_type_delete('ebookstripe_illustration');
+    node_type_delete('ebookstripe_button');
+    node_type_delete('ebookstripe_product');
+    
+    foreach (array_keys(node_type_get_names()) as $term) {
+        if (stristr($term, "ebookstripe_chapter")) {
+            $sql    = 'SELECT nid FROM {node} n WHERE n.type = :type';
+            $result = db_query($sql, array(
+                ':type' => "$term"
+            ));
+            $nids   = array();
+            foreach ($result as $row) {
+                $nids[] = $row->nid;
+            }
+            node_delete_multiple($nids);
+            node_type_delete($term);
+        }
+    }
+    
+    $listofbooks = variable_get('ebookstripe_number_chapters');
+    $listofbooks = explode(" ", $listofbooks);
+    foreach ($listofbooks as $book) {
+        $numchapter = explode("-", $book);
+        
+        for ($x = 0; $x <= $numchapter[1]; $x++) {
+            $term = $numchapter[0] . "_chapter" . $x;
+            user_role_delete($term);
+            $taxterm = taxonomy_get_term_by_name($term);
+            if ($taxterm) {
+                foreach (array_keys($taxterm) as $tid) {
+                    taxonomy_term_delete($tid);
+                }
+            }
+            
+        }
+    }
+    variable_del('ebookstripe_number_chapters');
+    
+    // Purge all field infromation
+    // http://api.drupal.org/api/function/field_purge_batch/7
+    field_purge_batch(1000);
+    drupal_flush_all_caches();
 }
