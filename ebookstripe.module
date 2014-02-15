@@ -917,8 +917,10 @@ function ebookstripe_form_callback($form, $form_state)
 {
     // Require ebookstripe Library.
     // NOTE: Transition this to using the Library 2.0 API
-    require_once("lib/stripe-php/lib/Stripe.php");
-    
+     if (($library = libraries_load('stripe')) && !empty($library['loaded'])) {
+    } else {
+      require_once("lib/stripe-php/lib/Stripe.php");
+    }
     $one   = variable_get('ebookstripe_secret_testkey');
     $two   = variable_get('ebookstripe_secret_livekey');
     $three = variable_get('ebookstripe_gonelive');
@@ -1060,7 +1062,8 @@ function ebookstripe_form_callback($form, $form_state)
             drupal_set_message(t('There was a problem sending your receipt and it was not sent.'), 'error');
         }
     }
-    drupal_goto();
+    $redirectpage = "/" . arg(1) . "/table_of_contents";
+    drupal_goto($redirectpage);
 }
 
 
